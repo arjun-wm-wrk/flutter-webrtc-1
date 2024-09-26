@@ -47,6 +47,9 @@ class RTCVideoRenderer extends ValueNotifier<RTCVideoValue>
   Function? onFirstFrameRendered;
 
   @override
+  dynamic videoFrames;
+
+  @override
   set srcObject(MediaStream? stream) {
     if (_disposed) {
       throw 'Can\'t set srcObject: The RTCVideoRenderer is disposed';
@@ -108,7 +111,6 @@ class RTCVideoRenderer extends ValueNotifier<RTCVideoValue>
     return super.dispose();
   }
 
-    dynamic videoFrames = null;
 
   void eventListener(dynamic event) {
     if (_disposed) return;
