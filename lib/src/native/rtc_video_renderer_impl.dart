@@ -14,7 +14,7 @@ class RTCVideoRenderer extends ValueNotifier<RTCVideoValue>
   int? _textureId;
   bool _disposed = false;
   MediaStream? _srcObject;
-  StreamSubscription<dynamic>? _eventSubscription;
+  StreamSubscription<dynamic>? eventSubscription;
 
   @override
   Future<void> initialize() async {
@@ -23,7 +23,7 @@ class RTCVideoRenderer extends ValueNotifier<RTCVideoValue>
     }
     final response = await WebRTC.invokeMethod('createVideoRenderer', {});
     _textureId = response['textureId'];
-    _eventSubscription = EventChannel('FlutterWebRTC/Texture$textureId')
+    eventSubscription = EventChannel('FlutterWebRTC/Texture$textureId')
         .receiveBroadcastStream()
         .listen(eventListener, onError: errorListener);
   }
@@ -46,8 +46,6 @@ class RTCVideoRenderer extends ValueNotifier<RTCVideoValue>
   @override
   Function? onFirstFrameRendered;
 
-  @override
-  dynamic videoFrames;
 
   @override
   set srcObject(MediaStream? stream) {
@@ -94,8 +92,8 @@ class RTCVideoRenderer extends ValueNotifier<RTCVideoValue>
   @override
   Future<void> dispose() async {
     if (_disposed) return;
-    await _eventSubscription?.cancel();
-    _eventSubscription = null;
+    await eventSubscription?.cancel();
+    eventSubscription = null;
     if (_textureId != null) {
       try {
         await WebRTC.invokeMethod('videoRendererDispose', <String, dynamic>{
@@ -133,7 +131,7 @@ class RTCVideoRenderer extends ValueNotifier<RTCVideoValue>
         onFirstFrameRendered?.call();
         break;
       case 'onVideoFrame':
-        videoFrames = map['data'];
+       print(map['data']);
         break;
     }
   }
