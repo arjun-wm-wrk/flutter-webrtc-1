@@ -108,6 +108,8 @@ class RTCVideoRenderer extends ValueNotifier<RTCVideoValue>
     return super.dispose();
   }
 
+    dynamic videoFrames = null;
+
   void eventListener(dynamic event) {
     if (_disposed) return;
     final Map<dynamic, dynamic> map = event;
@@ -127,6 +129,9 @@ class RTCVideoRenderer extends ValueNotifier<RTCVideoValue>
       case 'didFirstFrameRendered':
         value = value.copyWith(renderVideo: renderVideo);
         onFirstFrameRendered?.call();
+        break;
+      case 'onVideoFrame':
+        videoFrames = map['data'];
         break;
     }
   }
